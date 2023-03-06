@@ -1,0 +1,95 @@
+<h2>Create Pages</h2>
+<p>Enter the number of pages to create:</p>
+<div id="page-count">
+  <input id="count" type="number" value="1" min="1">
+  <button id="create-pages">Create Pages</button>
+</div>
+<div id="page-names" style="display: none;">
+  <p>Enter page names:</p>
+  <ul id="page-name-list">
+    <li>
+      <select id="page-type">
+        <option value="page">Page</option>
+        <option value="separator">Separator</option>
+        <option value="section">Section</option>
+      </select>
+      <input type="text" value="Cover" readonly>
+    </li>
+  </ul>
+  <div>
+    <button id="add-page">+</button>
+    <button id="remove-page">-</button>
+    <button id="create">Create</button>
+  </div>
+</div>
+<script>
+  const pageCount = document.getElementById('page-count');
+  const pageNames = document.getElementById('page-names');
+  const countInput = document.getElementById('count');
+  const pageList = document.getElementById('page-name-list');
+  
+  document.getElementById('create-pages').onclick = () => {
+    const count = parseInt(countInput.value);
+    if (count > 1) {
+      // Hide the count input and show the page name inputs
+      pageCount.style.display = 'none';
+      pageNames.style.display = 'block';
+      
+      // Add inputs for the remaining pages
+      for (let i = 1; i < count; i++) {
+        addPageInput();
+      }
+    }
+  };
+  
+  document.getElementById('add-page').onclick = () => {
+    addPageInput();
+  };
+  
+  document.getElementById('remove-page').onclick = () => {
+    const pageInputs = pageList.getElementsByTagName('li');
+    if (pageInputs.length > 1) {
+      pageInputs[pageInputs.length - 1].remove();
+    }
+  };
+  
+  document.getElementById('create').onclick = () => {
+    const pageInputs = pageList.getElementsByTagName('li');
+    const pageNames = [];
+    for (let i = 0; i < pageInputs.length; i++) {
+      const pageType = pageInputs[i].getElementsByTagName('select')[0].value;
+      const nameInput = pageInputs[i].getElementsByTagName('input')[0];
+      const name = nameInput.value;
+      pageNames.push({type: pageType, name: name});
+    }
+    
+    parent.postMessage({ pluginMessage: { type: 'create-pages', count: pageNames.length, names: pageNames } }, '*');
+  };
+  
+  function addPageInput() {
+    const li = document.createElement('li');
+    
+    const select = document.createElement('select');
+    const option1 = document.createElement('option');
+    option1.value = 'page';
+    option1.text = 'Page';
+    const option2 = document.createElement('option');
+    option2.value = 'separator';
+    option2.text = 'Separator';
+    const option3 = document.createElement('option');
+    option3.value = 'section';
+    option3.text = 'Section';
+    select.appendChild(option1);
+    select.appendChild(option2);
+    select.appendChild(option3);
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = '';
+    input.readOnly = true;
+    
+    li.appendChild(select);
+    li.appendChild(input);
+    pageList.appendChild(li);
+  }
+</script>

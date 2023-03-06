@@ -1,0 +1,172 @@
+<div class="container">
+  <h1>Organize Figma Pages</h1>
+  <div class="question">
+    <p>How many pages do you want to create?</p>
+    <input id="page-count" type="number" min="1" max="999" value="1">
+  </div>
+  <button id="create" class="primary">Create</button>
+  <div id="page-list"></div>
+  <div class="buttons">
+    <button id="add-page">+</button>
+    <button id="remove-page">-</button>
+    <button id="create-pages" class="primary">Create Pages</button>
+    <button id="delete-pages" class="secondary">Delete Pages</button>
+  </div>
+</div>
+
+<script>
+  const pageListContainer = document.getElementById("page-list");
+  const createButton = document.getElementById("create");
+  const pageCountInput = document.getElementById("page-count");
+  const addPageButton = document.getElementById("add-page");
+  const removePageButton = document.getElementById("remove-page");
+  const createPagesButton = document.getElementById("create-pages");
+  const deletePagesButton = document.getElementById("delete-pages");
+
+  let pageList = [{ type: "page", name: "🏁 cover", editable: false }];
+
+  function createPageListItem() {
+    const listItem = document.createElement("div");
+    listItem.classList.add("page-list-item");
+
+    const select = document.createElement("select");
+    select.name = "page-type";
+
+    // Aggiungo l'attributo "value" ai tag "option" per indicare il valore associato ad ogni opzione.
+    const optionPage = document.createElement("option");
+    optionPage.value = "page";
+    optionPage.text = "Page";
+    select.add(optionPage);
+
+    const optionSeparator = document.createElement("option");
+    optionSeparator.value = "separator";
+    optionSeparator.text = "Separator";
+    select.add(optionSeparator);
+
+    const optionSection = document.createElement("option");
+    optionSection.value = "section";
+    optionSection.text = "Section";
+    select.add(optionSection);
+
+    const input = document.createElement("input");
+    input.type = "text";
+
+    select.addEventListener("change", () => {
+      if (select.value === "page") {
+        input.placeholder = "Page " + (pageList.length - 1);
+        input.value = "";
+        input.disabled = false;
+      } else if (select.value === "separator") {
+        input.placeholder = "---------------------------";
+        input.value = "";
+        input.disabled = true;
+      } else if (select.value === "section") {
+        input.placeholder = "Section " + (pageList.filter(p => p.type === "section").length + 1);
+        input.value = "";
+        input.disabled = false;
+      }
+    });
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "-";
+    deleteButton.addEventListener("click", () => {
+      listItem.remove();
+    });
+
+    listItem.appendChild(select);
+    listItem.appendChild(input);
+    listItem.appendChild(deleteButton);
+
+    return listItem;
+  }
+
+  function renderPageList() {
+    pageListContainer.innerHTML = "";
+    pageList.forEach((item, index) => {
+      const listItem = createPageListItem();
+
+      const select = listItem.querySelector("select");
+      select.value = item.type;
+      select.disabled = index === 0;
+      select.dispatchEvent(new Event("change"));
+
+      const input = listItem.querySelector("input");
+      input.value = item.name;
+      input.addEventListener("input", () => {
+        item.name = input.value;
+      });
+
+      pageListContainer.appendChild(listItem);
+    });
+  }
+
+  function updatePageList() {
+    // Aggiungo il carattere mancante dopo "editable"
+    pageList = [{
+      type: "page", name: "🏁 cover", editable: false
+    }];
+    const pageListItems = pageListContainer.querySelectorAll(".page-list-item");
+
+    pageListItems.forEach((item, index) => {
+      const select = item.querySelector("select");
+      const input = item.querySelector("input");
+
+      pageList[index + 1] = {
+        type: select.value,
+        name: input.value,
+        editable: select.value === "page"
+      };
+    });
+
+    renderPageList();
+  }
+
+  function addPageListItem() {
+    const listItem = createPageListItem();
+    pageListContainer.appendChild(listItem);
+    updatePageList();
+  }
+  function createPages() {
+    const pageCount = parseInt(pageCountInput.value);
+    if (!isNaN(pageCount) && pageCount > 0) {
+  for (let i = 1; i <= pageCount; i++) {
+    const pageName = "Page " + (pageList.length - 1 + i);
+    pageList.push({
+      type: "page",
+      name: pageName,
+      editable: true
+    });
+  }
+
+  renderPageList();
+  
+}
+}
+
+function deletePages() {
+pageList = [{ type: "page", name: "🏁 cover", editable: false }];
+renderPageList();
+}
+
+renderPageList();
+
+createButton.addEventListener("click", () => {
+addPageListItem();
+});
+
+removePageButton.addEventListener("click", () => {
+removePageListItem();
+});
+
+addPageButton.addEventListener("click", () => {
+addPageListItem();
+});
+
+createPagesButton.addEventListener("click", () => {
+createPages();
+});
+
+deletePagesButton.addEventListener("click", () => {
+deletePages();
+});
+</script>

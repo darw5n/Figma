@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Plugin</title>
+    <style>
+      button {
+        background-color: #2ecc71;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #27ae60;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="create-pages-btn">Crea pagine</button>
+
+    <script>
+      document.getElementById('create-pages-btn').addEventListener('click', () => {
+        // Invia un messaggio al plugin per creare le pagine
+        parent.postMessage({pluginMessage: {type: 'create-pages'}}, '*');
+      });
+    </script>
+  </body>
+</html>
