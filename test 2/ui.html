@@ -1,148 +1,146 @@
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.13.0/Sortable.min.js"></script>
+  <link href='https://css.gg/css' rel='stylesheet'>
+
   <style id="figma-style">
+    :root {
+      --font-size-normal: 1rem;
+      --font-size-component: .9rem;
+      --font-size-small: .8rem;
+    }
+
     body {
       background-color: var(--figma-color-bg);
     }
 
     .main-container {
       font-family: system-ui;
+      font-size: var(--font-size-normal);
       color: var(--figma-color-text) !important;
       padding: 2rem;
-      font-size: 1.1rem;
     }
 
-    .main-container #create-pages-btn {
-      font-size: 1rem;
-      background-color: var(--figma-color-bg-component);
-      color: var(--figma-color-text-onbrand);
-      padding: 1rem 2rem;
-      /* margin: 1rem 0; */
-      margin: 0;
-      border-radius: 0.5rem;
-      border: 0;
-      font-size: 1.1rem;
+    .main-container h2 {
+      margin-top: 3rem;
     }
 
-    .main-container #create-pages-btn:hover {
-      background-color: var(--figma-color-bg-component-hover);
+    /* label ---------------------------------- */
+    .question label {
+      font-size: var(--font-size-small);
+      margin-bottom: .5rem;
     }
 
-    /* .main-container #create-pages-btn::pressed{
-      background-color: var(--figma-color-bg-component-pressed);
-    } */
+    /* question ---------------------------------- */
+    .question {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 1rem;
+    }
 
+    .quest.left,
+    .quest.right {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quest.left {
+      width: 100%;
+    }
+
+    /* row ---------------------------------- */
+
+    /* page name container ---------------------------------- */
+    .page-name-container {
+      display: flex;
+      flex-direction: row;
+      /* justify-content: space-between; */
+      align-items: baseline;
+      flex-wrap: nowrap;
+      margin-bottom: .8rem;
+      gap: 1rem;
+    }
+
+    /* select input ---------------------------------- */
     .main-container input,
     .main-container select {
-      border: 2px solid var(--figma-color-text);
-      border-radius: 4px;
-      padding: 0 1rem;
+      font-size: var(--font-size-component);
+      border-radius: 0.25rem;
+      padding: 0.5rem 1rem;
       background-color: var(--figma-color-bg);
-      color: var(--figma-color-text-onbrand);
       transition: all 0.4s ease-in-out;
-      font-size: 1rem;
+      height: 35px;
+      border: 1px solid var(--figma-color-border-disabled-strong);
+      color: var(--figma-color-text);
     }
 
+    .main-container input:disabled,
+    .main-container select:disabled {
+      border: 1px solid var(--figma-color-border);
+      color: var(--figma-color-text-disabled);
+    }
+
+
+    /* select ---------------------------------- */
     .main-container select {
-      /* -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none; */
-      background-color: var(--figma-color-bg);
-      border-radius: 4px;
-      display: inline-block;
-      font: inherit;
-      line-height: 1.5em;
-      margin: 0;
+      background-image: linear-gradient(45deg, transparent 50%, var(--figma-color-border-disabled-strong) 50%), linear-gradient(135deg, var(--figma-color-border-disabled-strong) 50%, transparent 50%);
+      background-position: calc(100% - 15px) .95rem, calc(100% - 10px) .95rem, calc(100% - 2.3em) 0.3rem;
+      background-size: 5px 5px, 5px 5px, 1px 1.5em;
+      background-repeat: no-repeat;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
       -webkit-appearance: none;
       -moz-appearance: none;
-
     }
 
-    .main-container select:focus {
-      border: 2px solid var(--figma-color-border-brand-strong);
+    .main-container select:disabled {
+      background-image: linear-gradient(45deg, transparent 50%, var(--figma-color-border) 50%), linear-gradient(135deg, var(--figma-color-border) 50%, transparent 50%);
     }
 
-    .main-container select:focus-visible {
-      outline: 0;
+    .page-name-container select {
+      min-width: 120px;
     }
 
-    .main-container select::-ms-expand {
-      /* display: none; */
+    .main-container select+select {
+      min-width: 72px;
+      font-size: var(--font-size-small);
     }
 
-    .quest {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      align-content: center;
-      justify-content: space-between;
-      align-items: center;
-      height: 2.5rem;
-      margin-bottom: 1rem;
+    /* input ---------------------------------- */
+    .main-container input {
+      border: 1px solid var(--figma-color-border-disabled-strong);
     }
 
-    #page-names {
-      margin: 2rem 0;
+    .main-container .quest.right input {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
     }
 
-    #page-names div {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      align-content: center;
-      justify-content: flex-start;
-      align-items: center;
-      height: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    #page-names div input {
+    .page-name-container input {
       width: 100%;
+    }
+
+    input:focus {
+      /* color: var(--figma-color-text);
+      outline: none !important;
+      border-color: var(--figma-color-border-brand-strong); */
+    }
+    .quest.right input:focus {
       color: var(--figma-color-text);
-
+      outline: none !important;
+      border-color: none;
     }
 
-    #page-names div select {
-      color: var(--figma-color-text);
-      width: 40%;
-      margin-right: 1rem;
-      background-image: linear-gradient(45deg, transparent 50%, var(--figma-color-text) 50%), linear-gradient(135deg, var(--figma-color-text) 50%, transparent 50%), linear-gradient(to right, #ccc, #ccc);
-      background-position: calc(100% - 20px) 1.05rem, calc(100% - 15px) 1.05rem, calc(100% - 2.3em) 0.3rem;
-      background-size: 5px 5px, 5px 5px, 1px 1.5em;
-      background-repeat: no-repeat;
-    }
-    #page-names div select + select{
-      width: 30%;
-    }
 
-    #page-names div input,
-    #page-names div select,
-    #num-pages {
-      height: 100%;
-    }
-
-    #page-names div input,
-    #page-names div select {
-      height: 100%;
-    }
-
+    /* btn ---------------------------------- */
     input[type=number]::-webkit-inner-spin-button {
       -webkit-appearance: none;
     }
 
     .btn-pages {
       display: flex;
-      height: 100%;
-    }
-
-    .btn-pages input {
-      text-align: center;
-      border: 2px solid var(--figma-color-text);
-      margin: 0 .2rem;
-      color: var(--figma-color-text);
-
     }
 
     .btn-pages #plus,
@@ -150,87 +148,180 @@
       width: 2.5rem;
       font-size: 1.5rem;
       color: var(--figma-color-bg-component);
-      /* border: 2px solid var(--figma-color-bg-component); */
-      border: 0;
       background-color: var(--figma-color-bg);
-      border-radius: .5rem;
       transition: all 0.4s ease-in-out;
     }
 
-    .btn-pages #plus:hover,
-    .btn-pages #min:hover {
-      color: var(--figma-color-bg-component-hover);
-      /* border: 2px solid var(--figma-color-bg-component-hover); */
+    .btn-pages #min {
+      border-top: 1px solid var(--figma-color-border-disabled-strong);
+      border-right: 0;
+      border-bottom: 1px solid var(--figma-color-border-disabled-strong);
+      border-left: 1px solid var(--figma-color-border-disabled-strong);
+      border-radius: 0.25rem 0 0 0.25rem;
     }
 
-    .emoji {
-      font-size: 1rem;
-      display: flex;
-      align-content: baseline;
-      align-items: baseline;
-      width: 100%;
-      margin-top: 3rem;
+    .btn-pages #plus {
+      border-top: 1px solid var(--figma-color-border-disabled-strong);
+      border-right: 1px solid var(--figma-color-border-disabled-strong);
+      border-bottom: 1px solid var(--figma-color-border-disabled-strong);
+      border-left: 0;
+      border-radius: 0 0.25rem 0.25rem 0;
     }
 
-    .emoji p {
-      min-width: 18%;
-    }
-
-    .emoji ul {
-      list-style: none;
+    .button.line {
+      margin-top: 2rem;
       display: flex;
       flex-direction: row;
-      justify-content: space-evenly;
-      padding-left: 0;
-      margin: 0;
-      width: 100%;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: nowrap;
     }
 
-    input:focus {
-      color: var(--figma-color-text);
-      outline: none !important;
-      border-color: var(--figma-color-border-brand-strong);
+    .btn.secondary {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
     }
+
+    button.secondary {
+      font-size: var(--font-size-component);
+      background-color: var(--figma-color-bg);
+      color: var(--figma-color-text);
+      margin: 0;
+      border-radius: 0.5rem;
+      border: 0;
+      text-decoration: underline;
+
+    }
+
+    button.secondary i {
+      display: inline-flex;
+      margin-right: 0.25rem;
+    }
+
+    button.secondary:first-child {
+      color: var(--figma-color-bg-brand);
+      display: flex;
+      align-items: center;
+    }
+
+    .main-container #create-pages-btn {
+      font-size: var(--font-size-component);
+      background-color: var(--figma-color-bg-component);
+      color: var(--figma-color-text-onbrand);
+      padding: 1rem 2rem;
+      /* margin: 1rem 0; */
+      margin: 0;
+      border-radius: 0.5rem;
+      border: 0;
+    }
+
+    .main-container #create-pages-btn:hover {
+      background-color: var(--figma-color-bg-component-hover);
+    }
+
+    .drag-handle {
+      height: 16px;
+      display: flex;
+    }
+
+    .drag-handle i {
+      color: var(--figma-color-border-disabled-strong);
+      font-style: normal;
+    }
+    
   </style>
+
 </head>
 
 <body>
   <div class="main-container">
 
     <!-- title -->
-    <h1>Figma Pages Organizer</h1>
+    <!-- <h1>Pages Organizer</h1> -->
+    <!-- -->
+    <div class="question">
+      <div class="quest left">
+        <label>Select your template:</label>
+        <!-- <select id="template" size="4"> -->
+        <select id="template">
+          <option>Custom</option>
+          <option>Design System</option>
+        </select>
 
-    <div class="quest">
-      <!-- Question -->
-      <label for="num-pages">How many pages do you want to create?</label>
-      <!-- input n pages-->
-      <div class="btn-pages">
-        <button id="min" onclick="dec('num-pages')">-</button>
-        <input type="number" id="num-pages" name="num-pages" min="1" max="15" value="1">
-        <button id="plus" onclick="inc('num-pages')">+</button>
+      </div>
+      <div class="quest right">
+        <!-- Question -->
+        <label for="num-pages">How many pages:</label>
+        <!-- input n pages-->
+        <div class="btn-pages">
+          <button id="min" onclick="dec('num-pages')">-</button>
+          <input type="number" id="num-pages" name="num-pages" min="1" max="30" value="1">
+          <button id="plus" onclick="inc('num-pages')">+</button>
+        </div>
       </div>
     </div>
 
     <!-- pages container -->
+    <h2>Your list</h2>
     <div id="page-names"></div>
 
-    <!-- create pages-->
-    <button id="create-pages-btn">Create pages</button>
+    <!-- download button -->
+    <div class="button line">
+      <div class="btn secondary">
+        <button id="download-btn" class="secondary"><i class="gg-software-download"></i> Download template</button>
+        <!-- import button -->
+        <button id="import-btn" class="secondary">Import</button>
+      </div>
+      <!-- create pages-->
+      <button id="create-pages-btn">Create pages</button>
+    </div>
 
   </div>
 
   <!-- ------------------ script  ------------------ -->
   <script>
 
+    // Funzione che aggiorna i campi input con i valori delle pagine
+    function updatePageNames(data) {
+      const pageCount = data.pageCount;
+      const pageNames = data.pageNames;
+      // Assegnare il numero di pagine al campo input "num-pages"
+      document.getElementById("num-pages").value = pageCount;
+      createPageNameInputs(pageCount);
+      console.log('PageCount: ' + pageCount);
+      console.log('PageNames: ' + pageNames);
 
+      // Assegnare i nomi delle pagine ai campi input "page-name-input-${i}"
+      for (let i = 0; i < pageCount; i++) {
+        const pageNameInput = document.getElementById(`page-name-input-${i + 1}`);
+        if (pageNameInput) {
+          pageNameInput.value = pageNames[i];
+        }
+        console.log('Pagina corrente ' + [i] + ' ' + pageNames[i] + ', couunt: ' + pageCount)
+      }
+    }
+
+
+    // Aggiungere un ascoltatore di messaggi che chiama la funzione updatePageNames
+    window.addEventListener("message", (event) => {
+      const { type, data } = event.data.pluginMessage;
+      if (type === "update-page-names") {
+        updatePageNames(data);
+      }
+    });
 
     const pageNamesContainer = document.getElementById('page-names');
 
+    //function create page input
     function createPageNameInput(pageNumber) {
+
+      let counter = 1;
       const inputContainer = document.createElement('div');
+      inputContainer.classList.add('page-name-container');
 
       //pagetype
-      const optionPage = ['Page','Subpage', 'Separator', 'Section' ];
+      const optionPage = ['Page', 'Subpage', 'Separator', 'Section'];
       const dropdownTypePage = document.createElement('select');
       dropdownTypePage.id = `page-dropdown-${pageNumber}`;
 
@@ -248,7 +339,7 @@
       });
 
       //emoji
-      const emojiOptions = [' ','🏁', '🏴‍☠️', '📝', '🕵️', '⏳', '🕹️', '🔽', '💡', '📌', '📐'];
+      const emojiOptions = ['', '🏁', '🏴‍☠️', '🎨', '📝', '🕵️', '⏳', '🕹️', '🔽', '💡', '📌', '📐', '🔤', '💎', '📚', '📖', '🔎'];
       const dropdownEmoji = document.createElement('select');
       dropdownEmoji.id = `page-emoji-dropdown-${pageNumber}`;
 
@@ -272,16 +363,18 @@
       input.id = `page-name-input-${pageNumber}`;
 
       if (pageNumber === 1) {
+        inputContainer.classList.add('cover');        // inserisco classe cover
         input.value = 'cover';
         input.disabled = true;
         dropdownEmoji.value = '🏁';
         dropdownEmoji.disabled = true;
         dropdownTypePage.value = 'Page';
         dropdownTypePage.disabled = true;
+      } else {
+        inputContainer.classList.add('page');        // inserisco classe cover
       }
 
       inputContainer.appendChild(input);
-
       dropdownTypePage.addEventListener('change', () => {
         input.value = '';
         const selectedOption = dropdownTypePage.value;
@@ -297,6 +390,183 @@
         }
       });
 
+
+
+      //template
+      // seleziona la select e l'input del numero di pagine
+      const template = document.querySelector('#template');
+      const numPagesInput = document.querySelector('#num-pages');
+
+
+
+      // aggiungi un gestore di evento per l'evento di cambio della select
+      template.addEventListener('change', (event) => {
+        // controlla il valore selezionato nella select
+        if (event.target.value === 'Custom') {
+          numPagesInput.value = '1';
+          createPageNameInputs();
+        } else if (event.target.value === 'Design System') {
+          numPagesInput.value = '12';
+          createPageNameInputs();
+
+          // aggiorna i valori degli elementi generati
+
+          // Pagina 2
+          const pageDropdown2 = document.querySelector('#page-dropdown-2');
+          pageDropdown2.value = optionPage[0];
+          const pageEmojiDropdown2 = document.querySelector('#page-emoji-dropdown-2');
+          pageEmojiDropdown2.value = emojiOptions[15];
+          const pageNameInput2 = document.querySelector('#page-name-input-2');
+          pageNameInput2.value = 'Read me';
+
+          // Pagina 3
+          const pageDropdown3 = document.querySelector('#page-dropdown-3');
+          pageDropdown3.value = optionPage[3];
+          const pageEmojiDropdown3 = document.querySelector('#page-emoji-dropdown-3');
+          pageEmojiDropdown3.value = emojiOptions[0];
+          const pageNameInput3 = document.querySelector('#page-name-input-3');
+          pageNameInput3.value = 'Foundations';
+
+          // Pagina 4
+          const pageDropdown4 = document.querySelector('#page-dropdown-4');
+          pageDropdown4.value = optionPage[1];
+          const pageEmojiDropdown4 = document.querySelector('#page-emoji-dropdown-4');
+          pageEmojiDropdown4.value = emojiOptions[3];
+          const pageNameInput4 = document.querySelector('#page-name-input-4');
+          pageNameInput4.value = 'Colors';
+
+          // Pagina 5
+          const pageDropdown5 = document.querySelector('#page-dropdown-5');
+          pageDropdown5.value = optionPage[1];
+          const pageEmojiDropdown5 = document.querySelector('#page-emoji-dropdown-5');
+          pageEmojiDropdown5.value = emojiOptions[12];
+          const pageNameInput5 = document.querySelector('#page-name-input-5');
+          pageNameInput5.value = 'Typography';
+
+          // Pagina 6
+          const pageDropdown6 = document.querySelector('#page-dropdown-6');
+          pageDropdown6.value = optionPage[1];
+          const pageEmojiDropdown6 = document.querySelector('#page-emoji-dropdown-6');
+          pageEmojiDropdown6.value = emojiOptions[13];
+          const pageNameInput6 = document.querySelector('#page-name-input-6');
+          pageNameInput6.value = 'Icons';
+
+          // Pagina 7
+          const pageDropdown7 = document.querySelector('#page-dropdown-7');
+          pageDropdown7.value = optionPage[1];
+          const pageEmojiDropdown7 = document.querySelector('#page-emoji-dropdown-7');
+          pageEmojiDropdown7.value = emojiOptions[11];
+          const pageNameInput7 = document.querySelector('#page-name-input-7');
+          pageNameInput7.value = 'Grid & Spacing';
+
+          // Pagina 8
+          const pageDropdown8 = document.querySelector('#page-dropdown-8');
+          pageDropdown8.value = optionPage[3];
+          const pageEmojiDropdown8 = document.querySelector('#page-emoji-dropdown-8');
+          pageEmojiDropdown8.value = emojiOptions[0];
+          const pageNameInput8 = document.querySelector('#page-name-input-8');
+          pageNameInput8.value = 'Components';
+
+          // Pagina 9
+          const pageDropdown9 = document.querySelector('#page-dropdown-9');
+          pageDropdown9.value = optionPage[1];
+          const pageEmojiDropdown9 = document.querySelector('#page-emoji-dropdown-9');
+          pageEmojiDropdown9.value = emojiOptions[0];
+          const pageNameInput9 = document.querySelector('#page-name-input-9');
+          pageNameInput9.value = 'Buttons';
+
+          // Pagina 10
+          const pageDropdown10 = document.querySelector('#page-dropdown-10');
+          pageDropdown10.value = optionPage[1];
+          const pageEmojiDropdown10 = document.querySelector('#page-emoji-dropdown-10');
+          pageEmojiDropdown10.value = emojiOptions[0];
+          const pageNameInput10 = document.querySelector('#page-name-input-10');
+          pageNameInput10.value = 'Inputs';
+
+          // Pagina 11
+          const pageDropdown11 = document.querySelector('#page-dropdown-11');
+          pageDropdown11.value = optionPage[1];
+          const pageEmojiDropdown11 = document.querySelector('#page-emoji-dropdown-11');
+          pageEmojiDropdown11.value = emojiOptions[0];
+          const pageNameInput11 = document.querySelector('#page-name-input-11');
+          pageNameInput11.value = 'Checkboxes';
+
+          // Pagina 12
+          const pageDropdown12 = document.querySelector('#page-dropdown-12');
+          pageDropdown12.value = optionPage[1];
+          const pageEmojiDropdown12 = document.querySelector('#page-emoji-dropdown-12');
+          pageEmojiDropdown12.value = emojiOptions[0];
+          const pageNameInput12 = document.querySelector('#page-name-input-12');
+          pageNameInput12.value = 'Dropdowns';
+
+          // Pagina Separator
+          // const pageDropdown9 = document.querySelector('#page-dropdown-9');
+          // pageDropdown9.value = optionPage[2];
+          // const pageEmojiDropdown9 = document.querySelector('#page-emoji-dropdown-9');
+          // pageEmojiDropdown9.value = emojiOptions[0];
+          // pageEmojiDropdown9.disabled = true;
+          // const pageNameInput9 = document.querySelector('#page-name-input-9')
+          // pageNameInput9.value = '———————————————————';
+          // pageNameInput9.disabled = true;
+
+
+        } else if (event.target.value === 'Option 3') {
+
+          numPagesInput.value = '5';
+          createPageNameInputs();
+
+          // aggiorna i valori degli elementi generati
+        }
+      });
+
+
+
+
+      // ------  Creo elementi draggabili
+      if (pageNumber > 1) {
+        Sortable.create(pageNamesContainer, {
+          animation: 150,
+          handle: ".drag-handle",
+          group: {
+            name: "pages",
+            pull: "clone",
+            put: function (to, from, dragEl, evt) {
+              return dragEl.classList.contains("page");
+            }
+          },
+          onEnd: function (evt) {
+            var coverEl = pageNamesContainer.querySelector(".cover");
+            var firstPageEl = pageNamesContainer.querySelector(".page");
+            if (coverEl && coverEl.nextElementSibling !== firstPageEl) {
+              pageNamesContainer.insertBefore(coverEl, firstPageEl);
+            } else if (evt.oldIndex === 0) {
+              pageNamesContainer.insertBefore(evt.item, evt.from.firstChild);
+            }
+          }
+        });
+        // Aggiungi drag handle
+        const dragHandle = document.createElement('div');
+        dragHandle.classList.add('drag-handle');
+        // dragHandle.innerHTML = '<i class="gg-format-justify"></i>';
+        dragHandle.innerHTML = '<i class=""><span>&#9776;</span></i>';
+        inputContainer.appendChild(dragHandle);
+
+        // Aggiungi l'evento "dragend" al container "page-names"
+        pageNamesContainer.addEventListener('dragend', () => {
+          // Itera gli elementi all'interno del container "page-names"
+          const pageDropdown = document.querySelectorAll('[id^="page-dropdown-"]');
+          const pageEmojiDropdown = document.querySelectorAll('[id^="page-emoji-dropdown-"]');
+          const pageNameInputs = document.querySelectorAll('[id^="page-name-input-"]');
+          for (let i = 0; i < pageNameInputs.length; i++) {
+            // Rinomina l'id dell'elemento in base alla nuova posizione
+            pageDropdown[i].id = `page-dropdown-${i + 1}`;
+            pageEmojiDropdown[i].id = `page-emoji-dropdown-${i + 1}`;
+            pageNameInputs[i].id = `page-name-input-${i + 1}`;
+          }
+        });
+      }
+      // ------  Fine creo elementi draggabili
+
       pageNamesContainer.appendChild(inputContainer);
     }
 
@@ -305,6 +575,8 @@
     function createPageNameInputs() {
       const numPagesInput = document.getElementById('num-pages');
       let numPages = parseInt(numPagesInput.value);
+      // createPageNameInput(numPages);
+
 
       // assicurati che il numero di pagine non sia inferiore a 1
       if (numPages < 1) {
@@ -352,31 +624,32 @@
         pageNames.push(pageName);
         selectedOptions.push(selectedOption);
         selectedEmojis.push(selectedEmoji);
-      
+
       });
 
       // Invia un messaggio al plugin per creare le pagine con i nomi specificati
       parent.postMessage({ pluginMessage: { type: 'create-pages', pageNames, selectedOptions, selectedEmojis } }, '*');
-     
+
     });
 
 
     function inc(element) {
       let el = document.querySelector(`[name="${element}"]`);
-      if (parseInt(el.value) < 15) {
-        document.getElementById("plus").disabled = false;
+      if (parseInt(el.value) < 30) {
+        // document.getElementById("plus").disabled = false;
         el.value = parseInt(el.value) + 1;
         createPageNameInputs(); // chiamare la funzione qui
 
-      } else if (parseInt(el.value) === 15) {
-        document.getElementById("plus").disabled = true;
+      } else if (parseInt(el.value) === 30) {
+        // document.getElementById("plus").disabled = true;
+        // createPageNameInputs(); // chiamare la funzione qui
       }
     }
     function dec(element) {
       let el = document.querySelector(`[name="${element}"]`);
-      if (parseInt(el.value) > 1 && parseInt(el.value) < 15) {
+      if (parseInt(el.value) > 1 && parseInt(el.value) < 30) {
         el.value = parseInt(el.value) - 1;
-        document.getElementById("plus").disabled = false;
+        // document.getElementById("plus").disabled = false;
         createPageNameInputs(); // chiamare la funzione qui
 
       } else {
@@ -385,5 +658,87 @@
       }
 
     }
+
+
+    // gestore di evento per il bottone "Download"
+    document.getElementById('download-btn').addEventListener('click', () => {
+      // crea un oggetto JSON con i valori inseriti dall'utente
+      const values = {
+        numPages: document.getElementById('num-pages').value,
+        pages: []
+      };
+      for (let i = 1; i <= values.numPages; i++) {
+        const page = {
+          type: document.getElementById(`page-dropdown-${i}`).value,
+          emoji: document.getElementById(`page-emoji-dropdown-${i}`).value,
+          name: document.getElementById(`page-name-input-${i}`).value
+        };
+        values.pages.push(page);
+      }
+
+      // converte l'oggetto JSON in una stringa
+      const jsonString = JSON.stringify(values);
+
+      // crea un nuovo oggetto File con la stringa JSON
+      const file = new File([jsonString], `${new Date().toISOString()}.json`, { type: 'application/json' });
+
+      // salva il file utilizzando FileSaver.js
+      saveAs(file);
+    });
+
+    // Aggiungi un gestore di eventi al pulsante "Import"
+    const importBtn = document.getElementById('import-btn');
+    importBtn.addEventListener('click', () => {
+      // Attiva la finestra di dialogo del file chooser
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/json';
+      input.addEventListener('change', () => {
+        // Leggi il contenuto del file selezionato
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const json = JSON.parse(event.target.result);
+          // Usa il contenuto del file per popolare i campi appropriati
+          populateFieldsFromJson(json);
+        };
+        reader.readAsText(input.files[0]);
+      });
+      input.click();
+    });
+
+    function populateFieldsFromJson(json) {
+      // Popola i campi del form con i dati dal file JSON
+      const numPagesInput = document.getElementById('num-pages');
+      numPagesInput.value = json.numPages;
+
+      // Crea gli input per i nomi delle pagine
+      createPageNameInputs();
+
+      // Popola i campi delle pagine con i dati dal file JSON
+      for (let i = 1; i <= json.numPages; i++) {
+        const pageDropdown = document.getElementById(`page-dropdown-${i}`);
+        const pageEmojiDropdown = document.getElementById(`page-emoji-dropdown-${i}`);
+        const pageNameInput = document.getElementById(`page-name-input-${i}`);
+
+        pageDropdown.value = json.pages[i - 1].type;
+        pageEmojiDropdown.value = json.pages[i - 1].emoji;
+        pageNameInput.value = json.pages[i - 1].name;
+      }
+    }
+
+
+    //blocco sull'input a 30 items
+    const inputNumPages = document.getElementById("num-pages");
+
+    inputNumPages.addEventListener("input", function() {
+      if (inputNumPages.value > 30) {
+        inputNumPages.value = 30;
+      } else if (inputNumPages.value < 1) {
+        inputNumPages.value = 1;
+      }
+    });
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
 </body>
