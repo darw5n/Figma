@@ -1,15 +1,13 @@
 // Creare un nuovo comando per il plugin
 figma.showUI(__html__, { themeColors: true, width: 720, height: 850 });
 
-// Verifica il numero di pagine nel documento
+/// Verifica il numero di pagine nel documento
 let pages = figma.root.children;
 if (pages.length > 1) {
   // Creare array con nomi di tutte le pagine
   let pageNames = [];
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
-    // Rimuovi eventuali caratteri speciali dal nome della pagina
-    // let cleanName = page.name.replace(/[^\w\s]/gi, "");
     let cleanName = page.name;
     cleanName = cleanName.trim(); // Rimuovi eventuali spazi all'inizio e alla fine del nome
 
@@ -33,36 +31,39 @@ figma.ui.onmessage = (msg) => {
     const pageNames = msg.pageNames;
     const selectedOptions = msg.selectedOptions;
     const selectedEmojis = msg.selectedEmojis;
-
-    console.log(pageNames.length);
+    const newPageCount = msg.newPageCount;
 
     // Selezionare la prima pagina creata
     figma.currentPage = figma.root.children[0];
 
-    // Rimuovere tutte le pagine esistenti
-    while (figma.root.children.length > 1) {
-      const page = figma.root.children[1];
-      page.remove();
+    // Eliminare le pagine esistenti in eccesso
+    if (newPageCount < pages.length) {
+      while (figma.root.children.length > newPageCount) {
+        const page = figma.root.children[figma.root.children.length - 1];
+        page.remove();
+      }
     }
 
-    // Creare pagine con i nomi specificati
-    let currentPage = figma.currentPage;
-    currentPage.name = formatPageName(
-      pageNames[0],
-      selectedOptions[0],
-      selectedEmojis[0]
-    );
-    for (let i = 1; i < pageNames.length; i++) {
-      let newPage = figma.createPage();
-      newPage.name = formatPageName(
+    // Rinominare le pagine esistenti se il nuovo numero di pagine è superiore a quello attuale
+    if (newPageCount > pages.length) {
+      for (let i = pages.length; i < newPageCount; i++) {
+        let newPage = figma.createPage();
+        newPage.name = formatPageName(
+          pageNames[i],
+          selectedOptions[i],
+          selectedEmojis[i]
+        );
+      }
+    }
+
+    // Rinominare tutte le pagine
+    for (let i = 0; i < figma.root.children.length; i++) {
+      let page = figma.root.children[i];
+      page.name = formatPageName(
         pageNames[i],
         selectedOptions[i],
         selectedEmojis[i]
       );
-
-      // console.log(selectedOptions[i]);
-      // console.log(selectedEmojis[i]);
-      // console.log(pageNames[i]);
     }
 
     // Selezionare la prima pagina creata
@@ -72,6 +73,7 @@ figma.ui.onmessage = (msg) => {
     figma.ui.postMessage({ type: "pages-created" });
   }
 };
+
 
 // Formatta il nome della pagina come appropriato
 function formatPageName(
