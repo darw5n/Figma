@@ -523,17 +523,17 @@
 
 
       // ------  Creo elementi draggabili
-      if (pageNumber > 1) {
-        Sortable.create(pageNamesContainer, {
-          animation: 150,
-          handle: ".drag-handle",
-          group: {
-            name: "pages",
-            pull: "clone",
-            put: function (to, from, dragEl, evt) {
-              return dragEl.classList.contains("page");
-            }
-          },
+if (pageNumber > 1) {
+  Sortable.create(pageNamesContainer, {
+    animation: 150,
+    handle: ".drag-handle",
+    group: {
+      name: "pages",
+      pull: "clone",
+      put: function (to, from, dragEl, evt) {
+        return dragEl.classList.contains("page");
+      }
+    },
           onEnd: function (evt) {
             var coverEl = pageNamesContainer.querySelector(".cover");
             var firstPageEl = pageNamesContainer.querySelector(".page");
@@ -542,6 +542,17 @@
             } else if (evt.oldIndex === 0) {
               pageNamesContainer.insertBefore(evt.item, evt.from.firstChild);
             }
+            if (evt.oldIndex !== evt.newIndex) {
+            const movedPage = figma.root.children[evt.oldIndex];
+            const targetPage = figma.root.children[evt.newIndex];
+            
+            // Rimuovi il contenuto dalla pagina originale
+            while (movedPage.children.length > 0) {
+              const child = movedPage.children[0];
+              child.remove();
+              targetPage.appendChild(child);
+            }
+  }
           }
         });
         // Aggiungi drag handle

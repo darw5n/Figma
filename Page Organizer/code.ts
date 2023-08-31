@@ -34,44 +34,38 @@ figma.ui.onmessage = (msg) => {
     const selectedOptions = msg.selectedOptions;
     const selectedEmojis = msg.selectedEmojis;
 
-    console.log(pageNames.length);
+    // Verifica il numero di pagine attuali
+    const numCurrentPages = figma.root.children.length;
 
     // Selezionare la prima pagina creata
     figma.currentPage = figma.root.children[0];
 
-    // Rimuovere tutte le pagine esistenti
-    while (figma.root.children.length > 1) {
-      const page = figma.root.children[1];
-      page.remove();
+    // Rinomina le pagine esistenti in base ai nuovi nomi
+    for (let i = 0; i < pageNames.length && i < numCurrentPages; i++) {
+      const page = figma.root.children[i];
+      page.name = formatPageName(pageNames[i], selectedOptions[i], selectedEmojis[i]);
     }
 
-    // Creare pagine con i nomi specificati
-    let currentPage = figma.currentPage;
-    currentPage.name = formatPageName(
-      pageNames[0],
-      selectedOptions[0],
-      selectedEmojis[0]
-    );
-    for (let i = 1; i < pageNames.length; i++) {
-      let newPage = figma.createPage();
-      newPage.name = formatPageName(
-        pageNames[i],
-        selectedOptions[i],
-        selectedEmojis[i]
-      );
-
-      // console.log(selectedOptions[i]);
-      // console.log(selectedEmojis[i]);
-      // console.log(pageNames[i]);
+    // Elimina o aggiungi le pagine in base al numero desiderato
+    if (numCurrentPages > pageNames.length) {
+      for (let i = numCurrentPages - 1; i >= pageNames.length; i--) {
+        const page = figma.root.children[i];
+        page.remove();
+      }
+    } else if (numCurrentPages < pageNames.length) {
+      for (let i = numCurrentPages; i < pageNames.length; i++) {
+        const newPage = figma.createPage();
+        newPage.name = formatPageName(pageNames[i], selectedOptions[i], selectedEmojis[i]);
+      }
     }
 
-    // Selezionare la prima pagina creata
-    figma.currentPage = figma.root.children[0];
-
-    // Informare l'interfaccia utente che l'operazione è stata completata
-    figma.ui.postMessage({ type: "pages-created" });
+    // Informa l'interfaccia utente che l'operazione è stata completata
+    figma.ui.postMessage({ type: "pages-managed" });
   }
 };
+
+
+
 
 // Formatta il nome della pagina come appropriato
 function formatPageName(
