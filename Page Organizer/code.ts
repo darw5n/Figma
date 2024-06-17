@@ -1,4 +1,4 @@
-// Creare un nuovo comando per il plugin
+// Mostra l'interfaccia utente
 figma.showUI(__html__, { themeColors: true, width: 720, height: 850 });
 
 // Verifica il numero di pagine nel documento
@@ -8,8 +8,6 @@ if (pages.length > 1) {
   let pageNames = [];
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
-    // Rimuovi eventuali caratteri speciali dal nome della pagina
-    // let cleanName = page.name.replace(/[^\w\s]/gi, "");
     let cleanName = page.name;
     cleanName = cleanName.trim(); // Rimuovi eventuali spazi all'inizio e alla fine del nome
 
@@ -34,42 +32,30 @@ figma.ui.onmessage = (msg) => {
     const selectedOptions = msg.selectedOptions;
     const selectedEmojis = msg.selectedEmojis;
 
-    console.log(pageNames.length);
+    // Verifica il numero di pagine attuali
+    const numCurrentPages = figma.root.children.length;
 
-    // Selezionare la prima pagina creata
-    figma.currentPage = figma.root.children[0];
-
-    // Rimuovere tutte le pagine esistenti
-    while (figma.root.children.length > 1) {
-      const page = figma.root.children[1];
-      page.remove();
+    // Rinomina le pagine esistenti in base ai nuovi nomi
+    for (let i = 0; i < pageNames.length && i < numCurrentPages; i++) {
+      const page = figma.root.children[i];
+      page.name = formatPageName(pageNames[i], selectedOptions[i], selectedEmojis[i]);
     }
 
-    // Creare pagine con i nomi specificati
-    let currentPage = figma.currentPage;
-    currentPage.name = formatPageName(
-      pageNames[0],
-      selectedOptions[0],
-      selectedEmojis[0]
-    );
-    for (let i = 1; i < pageNames.length; i++) {
-      let newPage = figma.createPage();
-      newPage.name = formatPageName(
-        pageNames[i],
-        selectedOptions[i],
-        selectedEmojis[i]
-      );
-
-      // console.log(selectedOptions[i]);
-      // console.log(selectedEmojis[i]);
-      // console.log(pageNames[i]);
+    // Elimina o aggiungi le pagine in base al numero desiderato
+    if (numCurrentPages > pageNames.length) {
+      for (let i = numCurrentPages - 1; i >= pageNames.length; i--) {
+        const page = figma.root.children[i];
+        page.remove();
+      }
+    } else if (numCurrentPages < pageNames.length) {
+      for (let i = numCurrentPages; i < pageNames.length; i++) {
+        const newPage = figma.createPage();
+        newPage.name = formatPageName(pageNames[i], selectedOptions[i], selectedEmojis[i]);
+      }
     }
 
-    // Selezionare la prima pagina creata
-    figma.currentPage = figma.root.children[0];
-
-    // Informare l'interfaccia utente che l'operazione è stata completata
-    figma.ui.postMessage({ type: "pages-created" });
+    // Informa l'interfaccia utente che l'operazione è stata completata
+    figma.ui.postMessage({ type: "pages-managed" });
   }
 };
 
@@ -83,9 +69,9 @@ function formatPageName(
     if (pageNames.trim().length == 0) {
       if (selectedEmojis.trim().length == 0) {
         return "—————  Section   —————";
-      } else return "—————  " + selectedEmojis + "  " + "Section" ;
+      } else return "—————  " + selectedEmojis + "  " + "Section";
     } else if (selectedEmojis.trim().length == 0) {
-      return"—————  " + pageNames + "  —————";
+      return "—————  " + pageNames + "  —————";
     } else return "—————  " + selectedEmojis + " " + pageNames + "  —————";
   } else if (selectedOptions === "Separator") {
     return "———————————————————";
@@ -93,7 +79,7 @@ function formatPageName(
     if (pageNames.trim().length == 0) {
       if (selectedEmojis.trim().length == 0) {
         return "↳ Subpage";
-      } else return "↳" + " " +selectedEmojis + "  " + "Subpage";
+      } else return "↳" + " " + selectedEmojis + "  " + "Subpage";
     } else if (selectedEmojis.trim().length == 0) {
       return "↳" + " " + pageNames;
     } else return "↳" + " " + selectedEmojis + "  " + pageNames;
