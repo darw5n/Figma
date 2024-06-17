@@ -8,5 +8,14 @@
   "editorType": [
     "figma"
   ],
-  "ui": "ui.html"
+  "ui": "ui.html",
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "https://*.figma.com",
+      "https://cdnjs.cloudflare.com",
+      "https://css.gg"
+    ],
+    "reasoning": "The plugin requires access to external resources for functionality."
+  }
 }
